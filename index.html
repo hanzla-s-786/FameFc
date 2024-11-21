@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lucky Life Draw</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      header {
+        background-color: #ff6600;
+        color: white;
+        padding: 10px 20px;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .navbar .logo {
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .navbar nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .navbar nav a {
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        position: relative;
+        transition: color 0.3s ease;
+      }
+
+      .navbar nav a::after {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 0%;
+        height: 2px;
+        background-color: white;
+        transition: width 0.3s ease;
+      }
+
+      .navbar nav a:hover::after {
+        width: 100%;
+      }
+
+      .navbar nav a:hover {
+        color: #ffe0b3;
+      }
+
+      .navbar .menu-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+      }
+
+      .navbar .menu-toggle div {
+        width: 25px;
+        height: 3px;
+        background-color: white;
+        margin: 5px 0;
+      }
+
+      .navbar nav.active {
+        display: flex;
+        flex-direction: column;
+        background-color: #ff6600;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        padding: 10px 0;
+      }
+
+      .navbar nav a {
+        margin: 10px;
+        text-align: center;
+      }
+
+      .navbar .login-icon {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        gap: 5px;
+      }
+      .navbar .login-icon a {
+        text-decoration: none;
+        color: white;
+      }
+
+      .hero {
+        background-color: #ffe0b3;
+        padding: 80px 20px 40px;
+        text-align: center;
+        margin-top: 60px;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        color: #ff6600;
+      }
+
+      .hero p {
+        font-size: 18px;
+      }
+
+      .content {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+.content a{
+    text-decoration: none;
+    color: #ff6600;
+    cursor: pointer;
+}
+      .content h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: #ff6600;
+      }
+
+      .content ul {
+        margin-left: 20px;
+        list-style-type: disc;
+      }
+      /* Prize Categories Section */
+      .prize-categories {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 40px;
+      }
+      #prizes h2 {
+        text-align: center;
+        font-weight: bold;
+      }
+
+      .prize-item {
+        position: relative;
+        width: 220px;
+        text-align: center;
+        overflow: hidden;
+        border-radius: 15px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+
+      .prize-item:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .prize-image {
+        position: relative;
+        overflow: hidden;
+        border-radius: 15px;
+      }
+
+      .prize-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.5s ease;
+      }
+
+      .prize-item:hover img {
+        transform: scale(1.1);
+      }
+
+      .prize-text {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        padding: 10px 15px;
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        text-align: center;
+        transform: translateY(100%);
+        transition: transform 0.4s ease;
+      }
+
+      .prize-item:hover .prize-text {
+        transform: translateY(0);
+      }
+
+      .prize-text h3 {
+        font-size: 18px;
+        margin-bottom: 5px;
+        color: #ffcc00;
+      }
+
+      .prize-text p {
+        font-size: 14px;
+        margin: 0;
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        .prize-item {
+          width: 90%;
+        }
+      }
+
+      .footer {
+        background-color: #333;
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .footer a {
+        color: #ff6600;
+        text-decoration: none;
+        margin: 0 10px;
+      }
+
+      .footer a:hover {
+        text-decoration: underline;
+      }
+
+      .btn {
+        background-color: #ff6600;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 16px;
+        display: inline-block;
+        margin-top: 20px;
+      }
+
+      .btn:hover {
+        background-color: #e65c00;
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 28px;
+        }
+
+        .hero p {
+          font-size: 16px;
+        }
+
+        .content h2 {
+          font-size: 24px;
+        }
+
+        .navbar nav {
+          display: none;
+        }
+
+        .navbar .menu-toggle {
+          display: flex;
+        }
+
+        .navbar nav.active {
+          display: flex;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .content {
+          padding: 40px;
+        }
+
+        .hero h1 {
+          font-size: 40px;
+        }
+
+        .hero p {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="navbar">
+        <div class="logo">Lucky Life Draw</div>
+        <nav>
+          <a href="#home">Home</a>
+          <a href="#how-to-participate">How to Participate</a>
+          <a href="#prizes">Prizes</a>
+          <a href="#terms">Terms & Conditions</a>
+        </nav>
+        <div class="menu-toggle" id="menu-toggle">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="login-icon">
+          <span><a href="signin.html">Login</a></span>
+          <img
+            src="https://img.icons8.com/material-rounded/24/ffffff/user.png"
+            alt="Login"
+          />
+        </div>
+      </div>
+    </header>
+
+    <section class="hero" id="home">
+      <h1>Welcome to Our Exclusive Lucky Life Draw!</h1>
+      <p>
+        Exciting Rewards Worth Over <strong>$5,000</strong> Await You! Don't
+        miss your chance to win big.
+      </p>
+      <a href="#how-to-participate" class="btn">Get Started</a>
+    </section>
+
+    <section class="content" id="how-to-participate">
+      <h2>How to Participate</h2>
+      <ul>
+        <li>
+          <strong><a href="sign-up.html">Sign Up:</a></strong> Register your
+          details to enter the draw.
+        </li>
+        <li>
+          <strong>Complete Easy Tasks:</strong> Increase your chances by
+          following us on social media, referring friends, or making small
+          purchases.
+        </li>
+        <li>
+          <strong>Wait for the Draw:</strong> Winners will be selected randomly.
+        </li>
+      </ul>
+    </section>
+    <!---------For prizes cetagories -------------->
+    <section class="content" id="prizes">
+      <h2>Prizes Categories</h2>
+      <div class="prize-categories">
+        <div class="prize-item">
+          <div class="prize-image">
+           <a href="signin.html"><img src="./components/img/p1.jpeg" alt="First Prize" /></a> 
+            <div class="prize-text">
+              <h3>First Prize</h3>
+              <p>Brand New iPhone 16 Pro Max</p>
+            </div>
+          </div>
+        </div>
+        <div class="prize-item">
+          <div class="prize-image">
+            <a href="signin.html"><img src="./components/img/p2.jpeg" alt="First Prize" /></a> 
+            <div class="prize-text">
+              <h3>Second Prize</h3>
+              <p>$500 Cash Back or an iPad, Apple Watch, etc.</p>
+            </div>
+          </div>
+        </div>
+        <div class="prize-item">
+          <div class="prize-image">
+            <a href="signin.html"><img src="./components/img/p3.jpeg" alt="First Prize" /></a> 
+            <div class="prize-text">
+              <h3>Third Prize</h3>
+              <p>$100 Cash Back or a gift worth the same value</p>
+            </div>
+          </div>
+        </div>
+        <div class="prize-item">
+          <div class="prize-image">
+            <a href="signin.html"><img src="./components/img/p4.jpeg" alt="First Prize" /></a> 
+            <div class="prize-text">
+              <h3>Surprise Rewards</h3>
+              <p>Additional surprise rewards await!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content" id="prizes">
+      <h2>Prizes</h2>
+      <ul>
+        <li><strong>First Prize:</strong> Brand New iPhone 16 Pro Max</li>
+        <li>
+          <strong>Second Prize:</strong> $500 Cash Back or an iPad, Apple Watch,
+          etc.
+        </li>
+        <li>
+          <strong>Third Prize:</strong> $100 Cash Back or a gift worth the same
+          value
+        </li>
+        <li><strong>Plus:</strong> Additional surprise rewards!</li>
+      </ul>
+    </section>
+
+    <section class="content" id="terms">
+      <h2>Terms & Conditions</h2>
+      <ul>
+        <li>
+          <strong>Eligibility:</strong> Open to participants who purchase a
+          ticket with a "lucky number."
+        </li>
+        <li>
+          <strong>Draw Date:</strong> Winners will be announced on [soon].
+        </li>
+        <li>
+          <strong>Privacy:</strong> Your personal details will not be shared
+          with third parties.
+        </li>
+        <li>
+          <strong>Limitations:</strong> Sharing your ticket number may lead to
+          disqualification.
+        </li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      <p>
+        <a href="#home">Home</a> |
+        <a href="#how-to-participate">How to Participate</a> |
+        <a href="#prizes">Prizes</a> |
+        <a href="#terms">Terms & Conditions</a>
+      </p>
+      <p>&copy; 2024 Lucky Life Draw. All rights reserved.</p>
+    </footer>
+
+    <script>
+      const menuToggle = document.getElementById("menu-toggle");
+      const nav = document.querySelector(".navbar nav");
+
+      menuToggle.addEventListener("click", () => {
+        nav.classList.toggle("active");
+      });
+    </script>
+  </body>
+</html>
